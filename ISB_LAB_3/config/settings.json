@@ -1,0 +1,10 @@
+{
+  "default_paths": {
+    "private_key": "private.pem",
+    "public_key": "public.pem",
+    "encrypted_key": "encrypted_key.bin",
+    "encrypted_file": "encrypted.bin",
+    "decrypted_file": "decrypted.txt"
+  },
+  "theme": "darkly"
+}
