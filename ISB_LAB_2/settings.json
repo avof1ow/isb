@@ -1,0 +1,5 @@
+{
+  "input_file_cpp": "output/cpp_sequence.txt",
+  "input_file_java": "output/java_sequence.txt",
+  "output_dir": "output/"
+}
