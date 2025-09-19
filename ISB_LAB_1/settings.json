@@ -1,0 +1,37 @@
+{
+    "project_root": ".",
+    "vigenere": {
+        "base_dir": "Part1",
+        "required_files": {
+            "input_file": "old_text.txt",
+            "key_file": "key.json",
+            "entry_point": "main.py"
+        },
+        "script": "main.py",
+        "output_file": "new_text.txt",
+        "success_message_template": "Шифрование Виженера успешно завершено!\nПроверьте {output_file}"
+    },
+    "frequency": {
+        "base_dir": "Part2",
+        "required_files": {
+            "encrypted_code_file": "encrypted_code.txt",
+            "alphabet_file": "alphabet.json"
+        },
+        "script": "part2.py",
+        "output_files": {
+            "preliminary_code_file": "preliminary_code.txt",
+            "probabilities_file": "probabilities.json"
+        },
+        "success_message_template": "Частотный анализ успешно завершен!\nПроверьте {preliminary_code_file} для авто-дешифровки,\nи\n{probabilities_file} для проверки вероятности символов."
+    },
+    "general": {
+        "input_file": "old_text.txt",
+        "key_file": "key.json",
+        "output_file": "new_text.txt",
+        "alphabet": "абвгдеёжзийклмнопрстуфхцчшщъыьэюя",
+        "encrypted_text_file": "encrypted_code.txt",
+        "probabilities_file": "probabilities.json",
+        "alphabet_probabilities_file": "alphabet.json",
+        "decrypted_text_file": "preliminary_code.txt"
+    }
+}
