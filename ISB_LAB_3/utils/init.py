@@ -1,4 +1,8 @@
-from .file_io import read_file, write_file
-from .config_manager import ConfigManager
+"""
+Пакет utils - вспомогательные утилиты приложения.
+"""
 
-__all__ = ['read_file', 'write_file', 'ConfigManager']
+from .config_manager import ConfigManager
+from .file_io import read_file, write_file
+
+__all__ = ["ConfigManager", "read_file", "write_file"]
