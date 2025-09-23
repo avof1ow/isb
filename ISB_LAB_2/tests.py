@@ -1,6 +1,6 @@
 import math
-from typing import Tuple, List
 from scipy import special
+from constants import SIZE_BLOCK, PI_VALUES, NUMBER_OF_BLOCKS
 
 def frequency_test(sequence: str) -> float:
     """
@@ -14,8 +14,7 @@ def frequency_test(sequence: str) -> float:
     sum_bits = 0
 
     # Подсчет суммы: +1 для '1', -1 для '0'
-    for bit in sequence:
-        sum_bits += 1 if bit == '1' else -1
+    sum_bits = sum( 1 if bit == '1' else -1 for bit in sequence )
 
     # Вычисление статистики
     s_obs = abs(sum_bits) / math.sqrt(n)
@@ -41,18 +40,22 @@ def runs_test(sequence: str) -> float:
         print(f"Тест на серии: Доля единиц ({pi:.6f}) слишком отклоняется. Тест не пройден.")
         return 0.0
 
-    runs = 1  
+    runs = 0
     for i in range(1, n):
         if sequence[i] != sequence[i-1]:
             runs += 1
 
     # Вычисление статистики
-    mean = (2.0 * ones * (n - ones)) / n + 1
-    variance = (2.0 * ones * (n - ones) * (2.0 * ones * (n - ones) - n)) / (n * n * (n - 1))
-    z = abs((runs - mean) / math.sqrt(variance))
+    numerator = abs(runs - 2 * n * ones * (1 - ones))
+    denominator = 2 * (math.sqrt(2 * n)) * ones * (1 - ones)
 
-    p_value = math.erfc(z / math.sqrt(2.0))
+    # Защита от деления на ноль
+    if denominator == 0:
+        return 0.0
+
+    p_value = math.erfc(numerator / denominator)
     return p_value
+
 
 def longest_run_test(sequence: str) -> float:
     """
@@ -62,20 +65,16 @@ def longest_run_test(sequence: str) -> float:
     Return:
         p-значение теста.
     """
-    #значение из методички
-    pi_values = [0.2148, 0.3672, 0.2305, 0.1875]  
-    
-    length = len(sequence)
-    m = 8
-    N = 16  
 
-    if length < m * N:
+    length = len(sequence)
+
+    if length < SIZE_BLOCK * NUMBER_OF_BLOCKS:
         raise ValueError("Sequence is too short for the test")
 
     v = [0, 0, 0, 0]
 
-    for i in range(0, m * N, m): 
-        block = sequence[i:i + m]
+    for i in range(0, SIZE_BLOCK * NUMBER_OF_BLOCKS, SIZE_BLOCK):
+        block = sequence[i:i + SIZE_BLOCK]
         max_length = current = 0
 
         for bit in block:
@@ -92,8 +91,8 @@ def longest_run_test(sequence: str) -> float:
             case max_length if max_length >= 4:
                 v[3] += 1
 
-    xi_square = sum(((v[i] - N * pi_values[i]) ** 2) / (N * pi_values[i]) for i in range(4))
+    xi_square = sum(((v[i] - NUMBER_OF_BLOCKS * PI_VALUES[i]) ** 2) / (NUMBER_OF_BLOCKS * PI_VALUES[i]) for i in range(4))
     
-    p_value = special.gammainc(3/2, xi_square/2)
+    p_value = special.gammaincc(3/2, xi_square/2)
     
     return p_value
