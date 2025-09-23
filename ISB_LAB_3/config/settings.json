@@ -6,5 +6,15 @@
     "encrypted_file": "encrypted.bin",
     "decrypted_file": "decrypted.txt"
   },
-  "theme": "darkly"
+  "theme": "darkly",
+  "colors": {
+    "background": "#f0f0f0",
+    "accent": "#4a6ea9",
+    "text": "#333333",
+    "tab_background": "#d9d9d9",
+    "field_background": "white"
+  },
+  "icons": {
+    "folder": "assets/folder.png"
+  }
 }
