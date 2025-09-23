@@ -1,15 +1,16 @@
 from typing import Dict
-from core import symmetric, asymmetric, serialization
+from core import asymmetric, symmetric, serialization
 from core.exceptions import CryptoError
 
-def generate_rsa_keys() -> Dict[str, bytes]:
-    """Генерирует пару RSA-ключей (public + private).
 
-    Return:
-        str, bytes: {'private_key': приватный PEM-ключ, 'public_key': публичный PEM-данные}.
+def generate_rsa_keys() -> Dict[str, bytes]:
+    """Генерирует пару RSA-ключей.
+
+    Returns:
+        Dict: Словарь с приватным и публичным ключами в PEM-формате
 
     Raises:
-        CryptoError: если генерация не удалась.
+        CryptoError: Если генерация не удалась
     """
     try:
         private_key, public_key = asymmetric.generate_rsa_key_pair()
@@ -19,18 +20,19 @@ def generate_rsa_keys() -> Dict[str, bytes]:
     except Exception as e:
         raise CryptoError(f"Ошибка генерации RSA-ключей: {str(e)}")
 
+
 def hybrid_encrypt(plaintext: bytes, public_key_pem: bytes) -> Dict[str, bytes]:
-    """Шифрует данные.
+    """Шифрует данные гибридным методом (RSA + AES).
 
     Args:
-        plaintext: данные для шифрования.
-        public_key_pem: публичный PEM-ключ.
+        plaintext: Данные для шифрования
+        public_key_pem: Публичный ключ в PEM-формате
 
-    Return:
-        str, bytes: {'encrypted_symmetric': зашифрованный ключ, 'ciphertext': зашифрованные данные}.
+    Returns:
+        Dict: Словарь с зашифрованным ключом и данными
 
     Raises:
-        CryptoError: Если шифрование не удалось.
+        CryptoError: Если шифрование не удалось
     """
     try:
         public_key = serialization.deserialize_public_key(public_key_pem)
@@ -41,19 +43,20 @@ def hybrid_encrypt(plaintext: bytes, public_key_pem: bytes) -> Dict[str, bytes]:
     except Exception as e:
         raise CryptoError(f"Ошибка шифрования: {str(e)}")
 
+
 def hybrid_decrypt(ciphertext: bytes, encrypted_symmetric: bytes, private_key_pem: bytes) -> bytes:
-    """Дешифрует данные.
+    """Дешифрует данные гибридным методом.
 
     Args:
-        ciphertext: хашифрованные данные.
-        encrypted_symmetric: зашифрованный симметричный ключ.
-        private_key_pem: приватный PEM-ключ.
+        ciphertext: Зашифрованные данные
+        encrypted_symmetric: Зашифрованный симметричный ключ
+        private_key_pem: Приватный ключ в PEM-формате
 
-    Return:
-        bytes: расшифрованные данные.
+    Returns:
+        bytes: Расшифрованные данные
 
     Raises:
-        CryptoError: если дешифрование не удалось.
+        CryptoError: Если дешифрование не удалось
     """
     try:
         private_key = serialization.deserialize_private_key(private_key_pem)
