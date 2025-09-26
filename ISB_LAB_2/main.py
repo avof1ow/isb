@@ -58,15 +58,15 @@ def main() -> int:
     Returns:
         0 в случае успешного выполнения, 1 при возникновении ошибок.
     """
-    # Чтение settings.json
+    # Чтение paths.json
     try:
-        with open("settings.json", 'r') as config_file:
+        with open("paths.json", 'r') as config_file:
             config: Dict[str, Any] = json.load(config_file)
     except FileNotFoundError:
-        print("Ошибка: Не удалось открыть файл settings.json!")
+        print("Ошибка: Не удалось открыть файл paths.json!")
         return 1
     except json.JSONDecodeError as e:
-        print(f"Ошибка: Не удалось разобрать settings.json: {e}")
+        print(f"Ошибка: Не удалось разобрать paths.json: {e}")
         return 1
 
     # Получение путей к файлам
@@ -75,7 +75,7 @@ def main() -> int:
         java_input_file: str = config["input_file_java"]
         results_file: str = config["results"]
     except KeyError as e:
-        print(f"Ошибка: В settings.json отсутствует ключ '{e}'!")
+        print(f"Ошибка: В paths.json отсутствует ключ '{e}'!")
         return 1
 
     # Тестирование последовательностей и запись результатов
@@ -99,3 +99,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     exit(main())
+
