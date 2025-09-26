@@ -1,28 +1,39 @@
 import os
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding as sym_padding
-from core.exceptions import CryptoError
+from core.exceptions import KeyGenerationError, EncryptionError, DecryptionError
 
-def generate_symmetric_key() -> bytes:
+
+def generate_symmetric_key(key_size: int = 32) -> bytes:
     """Генерирует симметричный ключ для AES.
 
-    Return:
-        bytes: 32-байтовый ключ.
-    """
-    return os.urandom(32)
-
-def encrypt_data(data: bytes, symmetric_key: bytes) -> bytes:
-    """Шифрует данные с помощью AES.
-
     Args:
-        data: Данные для шифрования.
-        symmetric_key: Симметричный ключ (32 байта).
+        key_size: Размер ключа в байтах (по умолчанию 32 = 256 бит)
 
-    Return:
-        bytes: Зашифрованные данные (IV + ciphertext).
+    Returns:
+        bytes: Сгенерированный ключ
 
     Raises:
-        CryptoError: Если шифрование не удалось.
+        KeyGenerationError: Если генерация не удалась
+    """
+    try:
+        return os.urandom(key_size)
+    except Exception as e:
+        raise KeyGenerationError(f"Ошибка генерации симметричного ключа: {str(e)}")
+
+
+def encrypt_data(data: bytes, symmetric_key: bytes) -> bytes:
+    """Шифрует данные с помощью AES-CBC.
+
+    Args:
+        data: Данные для шифрования
+        symmetric_key: Симметричный ключ
+
+    Returns:
+        bytes: Зашифрованные данные (IV + ciphertext)
+
+    Raises:
+        EncryptionError: Если шифрование не удалось
     """
     try:
         iv = os.urandom(16)
@@ -35,20 +46,21 @@ def encrypt_data(data: bytes, symmetric_key: bytes) -> bytes:
 
         return iv + ciphertext
     except Exception as e:
-        raise CryptoError(f"Ошибка шифрования данных: {str(e)}")
+        raise EncryptionError(f"Ошибка шифрования данных: {str(e)}")
+
 
 def decrypt_data(ciphertext: bytes, symmetric_key: bytes) -> bytes:
-    """Дешифрует данные с помощью AES.
+    """Дешифрует данные с помощью AES-CBC.
 
     Args:
-        ciphertext: Зашифрованные данные (IV + ciphertext).
-        symmetric_key: Симметричный ключ (32 байта).
+        ciphertext: Зашифрованные данные (IV + ciphertext)
+        symmetric_key: Симметричный ключ
 
-    Return:
-        bytes: Расшифрованные данные.
+    Returns:
+        bytes: Расшифрованные данные
 
     Raises:
-        CryptoError: Если дешифрование не удалось.
+        DecryptionError: Если дешифрование не удалось
     """
     try:
         iv = ciphertext[:16]
@@ -63,4 +75,4 @@ def decrypt_data(ciphertext: bytes, symmetric_key: bytes) -> bytes:
 
         return plaintext
     except Exception as e:
-        raise CryptoError(f"Ошибка дешифрования данных: {str(e)}")
+        raise DecryptionError(f"Ошибка дешифрования данных: {str(e)}")
