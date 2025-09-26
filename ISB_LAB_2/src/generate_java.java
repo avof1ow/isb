@@ -1,3 +1,13 @@
+/**
+ * Извлекает значение поля input_file_java из JSON-файла настроек
+ *
+ * Функция выполняет поиск значения по ключу "input_file_java" в файле settings.json.
+ * Обрабатывает исключения ввода-вывода и случаи отсутствия требуемого поля.
+ * В случае ошибки выводит сообщение в stderr и возвращает пустую строку.
+ *
+ * @param filename путь к файлу settings.json
+ * @return значение поля input_file_java или пустая строка в случае ошибки
+ */
 public static String getInputFileJava(String filename) {
     try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
         String line;

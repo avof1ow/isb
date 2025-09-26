@@ -4,6 +4,15 @@
 
 using namespace std;
 
+/**
+ * @brief Извлекает значение поля input_file_cpp из JSON-файла настроек
+ *
+ * Функция выполняет поиск значения по ключу "input_file_cpp" в файле settings.json.
+ * Обрабатывает базовые ошибки чтения файла и форматирования JSON.
+ *
+ * @param filename Путь к файлу settings.json
+ * @return string Значение поля input_file_cpp или пустая строка в случае ошибки
+ */
 string getInputFileCpp(const string& filename) {
     ifstream file(filename);
     if (!file.is_open()) {
