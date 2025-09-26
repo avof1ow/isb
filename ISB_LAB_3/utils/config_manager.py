@@ -77,8 +77,11 @@ class ConfigManager:
             config: Словарь с настройками для сохранения
         """
         self.config_path.parent.mkdir(exist_ok=True)
-        with open(self.config_path, "w", encoding="utf-8") as file:
-            json.dump(config, file, indent=4, ensure_ascii=False)
+        try:
+            with open(self.config_path, "w", encoding="utf-8") as file:
+                json.dump(config, file, indent=4, ensure_ascii=False)
+        except IOError as e:
+            raise IOError(f"Ошибка сохранения конфигурации: {e}")
 
     def get(self, key: str, default: Any = None) -> Any:
         """
@@ -117,3 +120,4 @@ class ConfigManager:
 
         current[keys[-1]] = value
         self._save_config(self.config)
+
